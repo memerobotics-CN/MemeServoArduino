@@ -4,7 +4,7 @@
 MemeServoArduino is a arduino API for controlling MemeServo.
 
 ### Install MemeServoAPI
-`sh install_meme_servo_api.sh`
+`sh install_meme_servo_api.sh`  
 note: all existing files in src will be removed first.
 
 ### Usage
