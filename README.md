@@ -120,7 +120,7 @@ void setup()
   SerialToDevice.listen();
 #endif
 
-  MMS_SetProtocol(MMS_PROTOCOL_UART, sendDataUART, recvDataUART);  // For non-interrupt receive mode, specify receive function.
+  MMS_SetProtocol(MMS_PROTOCOL_UART, 0x01, sendDataUART, recvDataUART);  // For non-interrupt receive mode, specify receive function.
 
 #endif
 
@@ -155,11 +155,12 @@ void loop()
 {
   uint8_t errno;
   uint8_t status, in_position;
+  int32_t pos;
 
   for (int i=0; i<10; i++)
   {
     delay(100);
-    errno = MMS_ProfiledAbsolutePositionMove(ADDRESS_SERVO, i * 4096, errorHandler);
+    errno = MMS_ProfiledAbsolutePositionMove(ADDRESS_SERVO, (int32_t)i * 4096, errorHandler);
     Serial.print("MMS_ProfiledAbsolutePositionMove returned: ");
     Serial.println(errno, HEX);
   
@@ -190,4 +191,3 @@ void loop()
   }
 }
 ```
-
