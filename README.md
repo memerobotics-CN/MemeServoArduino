@@ -107,7 +107,7 @@ void setup()
 
   Wire.begin(ADDRESS_MASTER);     // join i2c bus
   Wire.onReceive(receiveEvent);   // register event
-  MMS_SetProtocol(MMS_PROTOCOL_I2C, sendDataI2C);
+  MMS_SetProtocol(MMS_PROTOCOL_I2C, 0x01, sendDataI2C);
 
 #else
 
