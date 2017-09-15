@@ -167,7 +167,7 @@ void loop()
     status = MMS_CTRL_STATUS_NO_CONTROL;
     in_position = 0;
 
-    while (status != MMS_CTRL_STATUS_POSITION_CONTROL && in_position != 1)
+    while (status != MMS_CTRL_STATUS_POSITION_CONTROL || in_position != 1)
     {
       delay(100);
       errno = MMS_GetControlStatus(ADDRESS_SERVO, &status, &in_position, errorHandler);
