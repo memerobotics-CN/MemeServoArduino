@@ -1,0 +1,163 @@
+#######################################
+# Syntax Coloring Map For MemeServoArduino
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+MMS_SetProtocol KEYWORD2
+
+MMS_OnData KEYWORD2
+
+MMS_SetTimerFunction KEYWORD2
+
+MMS_SetCommandTimeOut KEYWORD2
+
+MMS_SetGainP KEYWORD2
+MMS_SetGainI KEYWORD2
+MMS_SetGainD KEYWORD2
+MMS_SetAntiWindUp KEYWORD2
+MMS_SetErrorDeadZone KEYWORD2
+
+MMS_SetProfileAcceleration KEYWORD2
+MMS_SetProfileVelocity KEYWORD2
+
+MMS_SetPwmDeadZone KEYWORD2
+MMS_SetTorqueLimit KEYWORD2
+MMS_CurrentLimit KEYWORD2
+MMS_CurrentLimitDuration KEYWORD2
+
+MMS_VelocityMove KEYWORD2
+MMS_AbsolutePositionMove KEYWORD2
+MMS_RelativePositionMove KEYWORD2
+
+MMS_ProfiledVelocityMove KEYWORD2
+MMS_ProfiledAbsolutePositionMove KEYWORD2
+MMS_ProfiledRelativePositionMove KEYWORD2
+
+
+MMS_SetVelocitySetpoint KEYWORD2
+MMS_SetAbsolutePositionSetpoint KEYWORD2
+MMS_SetRelativePositionSetpoint KEYWORD2
+
+MMS_SetProfiledVelocitySetpoint KEYWORD2
+MMS_SetProfiledAbsolutePositionSetpoint KEYWORD2
+MMS_SetProfiledRelativePositionSetpoint KEYWORD2
+
+MMS_ConfigureDigitalIO KEYWORD2
+MMS_SetDigitalOut KEYWORD2
+#MMS_SetAnalogOut KEYWORD2
+
+MMS_SetNodeID KEYWORD2
+MMS_SetLocalAcceptanceMask KEYWORD2
+
+MMS_SetBaudUart KEYWORD2
+
+MMS_ResetPosition KEYWORD2
+
+MMS_Start KEYWORD2
+MMS_Halt KEYWORD2
+MMS_Stop KEYWORD2
+
+MMS_SetErrorReportingLevel KEYWORD2
+MMS_SetErrorReaction KEYWORD2
+MMS_ResetError KEYWORD2
+
+
+MMS_GetFirmwareVersion KEYWORD2
+
+MMS_GetGainP KEYWORD2
+MMS_GetGainI KEYWORD2
+MMS_GetGainD KEYWORD2
+MMS_GetAntiWindUp KEYWORD2
+MMS_GetErrorDeadZone KEYWORD2
+
+MMS_GetProfileAcceleration KEYWORD2
+MMS_GetProfileVelocity KEYWORD2
+
+MMS_GetPwmDeadZone KEYWORD2
+MMS_GetTorqueLimit KEYWORD2
+MMS_GetCurrentLimit KEYWORD2
+MMS_GetCurrentLimitDuration KEYWORD2
+
+MMS_GetDioConfiguration KEYWORD2
+
+MMS_GetLocalAcceptanceMask KEYWORD2
+
+MMS_GetDigitalIn KEYWORD2
+MMS_GetAnalogIn KEYWORD2
+
+MMS_GetAbsolutePosition KEYWORD2
+MMS_GetEncoderValue KEYWORD2
+
+MMS_GetVelocity KEYWORD2
+
+MMS_GetCurrent KEYWORD2
+MMS_GetVoltage KEYWORD2
+MMS_GetTemperature KEYWORD2
+
+MMS_GetControlStatus KEYWORD2
+
+MMS_GetErrorReportingLevel KEYWORD2
+MMS_GetErrorReaction KEYWORD2
+MMS_GetError KEYWORD2
+MMS_GetWarning KEYWORD2
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+MMS_RESP_SUCCESS                               LITERAL1
+
+MMS_RESP_MOTOR_STALLED                         LITERAL1
+MMS_RESP_ENCODER_OVERFLOW                      LITERAL1
+MMS_RESP_ENCODER_UNDERFLOW                     LITERAL1
+MMS_RESP_ERROR_MOTOR_CURRENT_LIMIT_EXCEEDED    LITERAL1
+
+//command related errors
+MMS_RESP_COMMAND_INVALID_COMMAND               LITERAL1
+MMS_RESP_COMMAND_INVALID_SET_COMMAND_BYTECOUNT LITERAL1
+MMS_RESP_COMMAND_INVALID_ARGUMENT              LITERAL1
+MMS_RESP_COMMAND_INVALID_FOR_MOTOR_STATE       LITERAL1
+MMS_RESP_COMMAND_INVALID_BYTECOUNT             LITERAL1
+
+//i2c related errors                           LITERAL1
+MMS_RESP_I2C_ERROR_NODEV                       LITERAL1
+MMS_RESP_I2C_ERROR_BUS_ERROR                   LITERAL1
+MMS_RESP_I2C_ERROR_ARBITRATION_LOST            LITERAL1
+MMS_RESP_I2C_ERROR_INDETERMINATE               LITERAL1
+MMS_RESP_I2C_ERROR_WAIT_ON_BUS_READY_TIMEOUT   LITERAL1
+MMS_RESP_I2C_ERROR_WAIT_ON_TRANSMIT_TIMEOUT    LITERAL1
+MMS_RESP_I2C_ERROR_WAIT_ON_RECEIVE_TIMEOUT     LITERAL1
+
+MMS_RESP_I2C_ERROR_RX_PACKET_OVERWRITTEN       LITERAL1
+MMS_RESP_I2C_ERROR_INVALID_RX_BYTECOUNT        LITERAL1
+
+//uart related errors                          LITERAL1
+MMS_RESP_UART_ERROR_MEMORY_ALLOCATION_ERROR    LITERAL1
+MMS_RESP_UART_ERROR_RX_BUFFER_EMPTY            LITERAL1
+MMS_RESP_UART_ERROR_RX_FRAME_ERROR             LITERAL1
+MMS_RESP_UART_ERROR_RX_PARITY_ERROR            LITERAL1
+MMS_RESP_UART_ERROR_RX_BUFFER_OVERFLOW         LITERAL1
+MMS_RESP_UART_ERROR_RX_DATA_OVERRUN            LITERAL1
+MMS_RESP_UART_ERROR_TX_TIMEOUT                 LITERAL1
+
+MMS_RESP_UART_ERROR_HALF_PACKET                LITERAL1
+
+//protocol related errors                      LITERAL1
+MMS_RESP_PROTOCOL_ERROR_RESPONSE_TIMEOUT       LITERAL1
+MMS_RESP_PROTOCOL_WRONG_LRC                    LITERAL1
+
+
+MMS_RESP_UNMATCHED_CMD                         LITERAL1
+MMS_RESP_TIMER_FUCN_NOT_SET                    LITERAL1
+MMS_RESP_INTERFACE_NOT_SET                     LITERAL1
+MMS_RESP_TIMEOUT                               LITERAL1
