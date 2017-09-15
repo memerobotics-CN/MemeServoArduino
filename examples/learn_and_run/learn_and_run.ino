@@ -265,7 +265,7 @@ void loop()
         do
         {
           delay(100);
-          errno = MMS_SetTorqueLimit(servo_ids[i], 1000, errorHandler);
+          errno = MMS_SetTorqueLimit(servo_ids[i], 500, errorHandler);
           if (errno != MMS_RESP_SUCCESS)
           {
             Serial.print("MMS_SetTorqueLimit returned: 0x");
