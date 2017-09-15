@@ -101,7 +101,7 @@ void errorHandler(uint8_t node_addr, uint8_t errno)
 void setup()
 {
   uint8_t errno;
-  uint8_t status;
+  uint8_t status, in_position;
 
   Serial.begin(115200);           // start serial for output
   while (!Serial);
@@ -110,7 +110,7 @@ void setup()
 
   Wire.begin(ADDRESS_MASTER);     // join i2c bus
   Wire.onReceive(receiveEvent);   // register event
-  MMS_SetProtocol(MMS_PROTOCOL_I2C, sendDataI2C);
+  MMS_SetProtocol(MMS_PROTOCOL_I2C, 0x01, sendDataI2C);
 
 #else
 
@@ -123,7 +123,7 @@ void setup()
   SerialToDevice.listen();
 #endif
 
-  MMS_SetProtocol(MMS_PROTOCOL_UART, sendDataUART, recvDataUART);  // For non-interrupt receive mode, specify receive function.
+  MMS_SetProtocol(MMS_PROTOCOL_UART, 0x01, sendDataUART, recvDataUART);  // For non-interrupt receive mode, specify receive function.
 
 #endif
 
@@ -171,17 +171,19 @@ void setup()
   } while (errno != MMS_RESP_SUCCESS);
   
   
-  status = MMS_CTRL_STATUS_NO_CONTROL;
-  while (status != MMS_CTRL_STATUS_POSITION_CONTROL)
-  {
-    errno = MMS_GetControlStatus(ADDRESS_SERVO, &status, errorHandler);
-
-    if (errno != MMS_RESP_SUCCESS)
+    status = MMS_CTRL_STATUS_NO_CONTROL;
+    in_position = 0;
+    while (status != MMS_CTRL_STATUS_POSITION_CONTROL || in_position  != 1)
     {
-      Serial.print("MMS_GetControlStatus returned: ");
-      Serial.println(errno, HEX);
+      delay(100);
+      errno = MMS_GetControlStatus(ADDRESS_SERVO, &status, &in_position, errorHandler);
+
+      if (errno != MMS_RESP_SUCCESS)
+      {
+        Serial.print("MMS_GetControlStatus returned: ");
+        Serial.println(errno, HEX);
+      }
     }
-  }
   
   do
   {

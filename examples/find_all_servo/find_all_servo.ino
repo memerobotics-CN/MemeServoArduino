@@ -107,7 +107,7 @@ void setup()
 
   Wire.begin(ADDRESS_MASTER);     // join i2c bus
   Wire.onReceive(receiveEvent);   // register event
-  MMS_SetProtocol(MMS_PROTOCOL_I2C, sendDataI2C);
+  MMS_SetProtocol(MMS_PROTOCOL_I2C, 0x01, sendDataI2C);
 
 #else
 
@@ -120,7 +120,7 @@ void setup()
   SerialToDevice.listen();
 #endif
 
-  MMS_SetProtocol(MMS_PROTOCOL_UART, sendDataUART, recvDataUART);  // For non-interrupt receive mode, specify receive function.
+  MMS_SetProtocol(MMS_PROTOCOL_UART, 0x01, sendDataUART, recvDataUART);  // For non-interrupt receive mode, specify receive function.
 
 #endif
 

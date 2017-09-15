@@ -96,7 +96,7 @@ void setup()
 
   Wire.begin(ADDRESS_MASTER);     // join i2c bus
   Wire.onReceive(receiveEvent);   // register event
-  MMS_SetProtocol(MMS_PROTOCOL_I2C, sendDataI2C);
+  MMS_SetProtocol(MMS_PROTOCOL_I2C, 0x01, sendDataI2C);
 
 #else
 
@@ -156,7 +156,7 @@ void loop()
     status = MMS_CTRL_STATUS_NO_CONTROL;
     in_position = 0;
 
-    while (status != MMS_CTRL_STATUS_POSITION_CONTROL && in_position != 1)
+    while (status != MMS_CTRL_STATUS_POSITION_CONTROL || in_position != 1)
     {
       delay(100);
       errno = MMS_GetControlStatus(ADDRESS_SERVO, &status, &in_position, errorHandler);
