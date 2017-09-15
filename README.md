@@ -8,9 +8,7 @@ MemeServoArduino is a arduino API for controlling MemeServo.
 note: all existing files in src will be removed first.
 
 ### Usage
-`
-
-
+```
 #include <Arduino.h>
 #include <Wire.h>
 
@@ -191,4 +189,4 @@ void loop()
     }
   }
 }
-`
+```
