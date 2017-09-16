@@ -152,7 +152,7 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(keyLearn), keyLearnPressedCallback, LOW);
   attachInterrupt(digitalPinToInterrupt(keyRun), keyRunPressedCallback, LOW);
 
-  MMS_SetCommandTimeOut(100);
+  MMS_SetCommandTimeOut(150);
   MMS_SetTimerFunction(millis, delay);
 
   servo_cnt = 0;
@@ -161,11 +161,12 @@ void setup()
 
   for (uint8_t i=2; i<=MAX_ID_TO_SCAN; i++)
   {
-    Serial.print("Trying servo: 0x");
+    Serial.print(F("Trying servo: 0x"));
     Serial.print(i, HEX);
     
     do 
     {
+      Serial.print(F("."));
       errno = MMS_ResetError(i, errorHandler);
     } while (errno != MMS_RESP_SUCCESS && errno != MMS_RESP_TIMEOUT);
 
@@ -173,10 +174,11 @@ void setup()
     {
       do 
       {
+        Serial.print(F("."));
         errno = MMS_SetZeroPosition(i, errorHandler);
       } while (errno != MMS_RESP_SUCCESS);
       
-      Serial.print("...Found servo: 0x");
+      Serial.print(F(" Found servo: 0x"));
       Serial.println(i, HEX);
       servo_ids[servo_cnt++] = i;
     }
@@ -188,7 +190,7 @@ void setup()
     if (servo_cnt >= sizeof(servo_ids)) break;
   }
 
-  Serial.print("Total servos found: "); Serial.println(servo_cnt);
+  Serial.print(F("Total servos found: ")); Serial.println(servo_cnt);
 
   keyLearnPressed = false;
   keyRunPressed = false;
@@ -205,7 +207,7 @@ void loop()
 
   if (servo_cnt == 0)
   {
-    Serial.println("No servo found.");
+    Serial.println(F("No servo found."));
     while(true);  // halt
   }
   
@@ -215,7 +217,7 @@ void loop()
     {
       uint8_t i;
  
-      Serial.println("Start learning mode.");
+      Serial.println(F("Start learning mode."));
       
       status = STATUS_LEARNING;
       step_count = 0;
@@ -223,25 +225,31 @@ void loop()
       // All servos got to zero
       for (i=0; i<servo_cnt; i++)
       {
+        uint8_t servo_addr = servo_ids[i];
+        
         do
         {
           delay(100);
-          errno = MMS_SetTorqueLimit(servo_ids[i], 65535, errorHandler);
+          errno = MMS_SetTorqueLimit(servo_addr, 65535, errorHandler);
           if (errno != MMS_RESP_SUCCESS)
           {
-            Serial.print("MMS_SetTorqueLimit returned: 0x");
-            Serial.println(errno, HEX);
+            Serial.print(F("MMS_SetTorqueLimit returned: 0x"));
+            Serial.print(errno, HEX);
+            Serial.print(F(", Node: 0x"));
+            Serial.println(servo_addr, HEX);
           }
         } while (errno != MMS_RESP_SUCCESS);
         
         do
         {
           delay(100);
-          errno = MMS_StartServo(servo_ids[i], MMS_MODE_ZERO, errorHandler);
+          errno = MMS_StartServo(servo_addr, MMS_MODE_ZERO, errorHandler);
           if (errno != MMS_RESP_SUCCESS)
           {
-            Serial.print("MMS_StartServo returned: 0x");
-            Serial.println(errno, HEX);
+            Serial.print(F("MMS_StartServo returned: 0x"));
+            Serial.print(errno, HEX);
+            Serial.print(F(", Node: 0x"));
+            Serial.println(servo_addr, HEX);
           }
         } while (errno != MMS_RESP_SUCCESS);
       }
@@ -249,17 +257,20 @@ void loop()
       // Wait servos in position
       for (i=0; i<servo_cnt; i++)
       {
+        uint8_t servo_addr = servo_ids[i];
         uint8_t ctrl_status = MMS_CTRL_STATUS_NO_CONTROL;
         uint8_t in_position = 0;
 
         do
         {
           delay(100);
-          errno = MMS_GetControlStatus(servo_ids[i], &ctrl_status, &in_position, errorHandler);
+          errno = MMS_GetControlStatus(servo_addr, &ctrl_status, &in_position, errorHandler);
           if (errno != MMS_RESP_SUCCESS)
           {
-            Serial.print("MMS_GetControlStatus returned: 0x");
-            Serial.println(errno, HEX);
+            Serial.print(F("MMS_GetControlStatus returned: 0x"));
+            Serial.print(errno, HEX);
+            Serial.print(F(", Node: 0x"));
+            Serial.println(servo_addr, HEX);
           }
         } while (errno != MMS_RESP_SUCCESS || ctrl_status != MMS_CTRL_STATUS_POSITION_CONTROL || in_position != 1);
       }
@@ -267,25 +278,31 @@ void loop()
       // Enter learnin mode
       for (i=0; i<servo_cnt; i++)
       {
+        uint8_t servo_addr = servo_ids[i];
+        
         do
         {
           delay(100);
-          errno = MMS_StartServo(servo_ids[i], MMS_MODE_LEARNING, errorHandler);
+          errno = MMS_StartServo(servo_addr, MMS_MODE_LEARNING, errorHandler);
           if (errno != MMS_RESP_SUCCESS)
           {
-            Serial.print("MMS_StartServo returned: 0x");
-            Serial.println(errno, HEX);
+            Serial.print(F("MMS_StartServo returned: 0x"));
+            Serial.print(errno, HEX);
+            Serial.print(F(", Node: 0x"));
+            Serial.println(servo_addr, HEX);
           }
         } while (errno != MMS_RESP_SUCCESS);
 
         do
         {
           delay(100);
-          errno = MMS_SetTorqueLimit(servo_ids[i], 500, errorHandler);
+          errno = MMS_SetTorqueLimit(servo_addr, 500, errorHandler);
           if (errno != MMS_RESP_SUCCESS)
           {
-            Serial.print("MMS_SetTorqueLimit returned: 0x");
-            Serial.println(errno, HEX);
+            Serial.print(F("MMS_SetTorqueLimit returned: 0x"));
+            Serial.print(errno, HEX);
+            Serial.print(F(", Node: 0x"));
+            Serial.println(servo_addr, HEX);
           }
         } while (errno != MMS_RESP_SUCCESS);
       }
@@ -310,24 +327,26 @@ void loop()
             errno = MMS_GetAbsolutePosition(servo_addr, &pos, errorHandler);
             if (errno != MMS_RESP_SUCCESS)
             {
-              Serial.print("MMS_GetAbsolutePosition returned: 0x");
-              Serial.println(errno, HEX);
+              Serial.print(F("MMS_GetAbsolutePosition returned: 0x"));
+              Serial.print(errno, HEX);
+              Serial.print(F(", Node: 0x"));
+              Serial.println(servo_addr, HEX);
             }
           } while (errno != MMS_RESP_SUCCESS);
   
           positions[step_count * servo_cnt + i] = pos;
         }
 
-        Serial.print("Frame ");
+        Serial.print(F("Frame "));
         Serial.print(step_count);
-        Serial.print(": ");
+        Serial.print(F(": "));
         
         for (i=0; i<servo_cnt; i++)
         {
             Serial.print(positions[step_count * servo_cnt + i]);
-            Serial.print(",");
+            Serial.print(F(","));
         }
-        Serial.println("#");
+        Serial.println(F("#"));
 
         step_count++;
       }
@@ -342,7 +361,7 @@ void loop()
     {
       uint8_t i;
 
-      Serial.println("Start running mode.");
+      Serial.println(F("Start running mode."));
       
       status = STATUS_RUNNING;
       curr_step = 0;
@@ -350,25 +369,31 @@ void loop()
       // All servos got to zero
       for (i=0; i<servo_cnt; i++)
       {
+        uint8_t servo_addr = servo_ids[i];
+        
         do
         {
           delay(100);
-          errno = MMS_SetTorqueLimit(servo_ids[i], 65535, errorHandler);
+          errno = MMS_SetTorqueLimit(servo_addr, 65535, errorHandler);
           if (errno != MMS_RESP_SUCCESS)
           {
-            Serial.print("MMS_SetTorqueLimit returned: 0x");
-            Serial.println(errno, HEX);
+            Serial.print(F("MMS_SetTorqueLimit returned: 0x"));
+            Serial.print(errno, HEX);
+            Serial.print(F(", Node: 0x"));
+            Serial.println(servo_addr, HEX);
           }
         } while (errno != MMS_RESP_SUCCESS);
         
         do
         {
           delay(100);
-          errno = MMS_StartServo(servo_ids[i], MMS_MODE_ZERO, errorHandler);
+          errno = MMS_StartServo(servo_addr, MMS_MODE_ZERO, errorHandler);
           if (errno != MMS_RESP_SUCCESS)
           {
-            Serial.print("MMS_StartServo returned: 0x");
-            Serial.println(errno, HEX);
+            Serial.print(F("MMS_StartServo returned: 0x"));
+            Serial.print(errno, HEX);
+            Serial.print(F(", Node: 0x"));
+            Serial.println(servo_addr, HEX);
           }
         } while (errno != MMS_RESP_SUCCESS);
       }
@@ -376,17 +401,20 @@ void loop()
       // Wait servos in position
       for (i=0; i<servo_cnt; i++)
       {
+        uint8_t servo_addr = servo_ids[i];
         uint8_t ctrl_status = MMS_CTRL_STATUS_NO_CONTROL;
         uint8_t in_position = 0;
         
         do
         {
           delay(100);
-          errno = MMS_GetControlStatus(servo_ids[i], &ctrl_status, &in_position, errorHandler);
+          errno = MMS_GetControlStatus(servo_addr, &ctrl_status, &in_position, errorHandler);
           if (errno != MMS_RESP_SUCCESS)
           {
-            Serial.print("MMS_GetControlStatus returned: 0x");
-            Serial.println(errno, HEX);
+            Serial.print(F("MMS_GetControlStatus returned: 0x"));
+            Serial.print(errno, HEX);
+            Serial.print(F(", Node: 0x"));
+            Serial.println(servo_addr, HEX);
           }
         } while (errno != MMS_RESP_SUCCESS || ctrl_status != MMS_CTRL_STATUS_POSITION_CONTROL || in_position != 1);
       }
@@ -402,47 +430,53 @@ void loop()
     // Wait servos in position
     for (i=0; i<servo_cnt; i++)
     {
+      uint8_t servo_addr = servo_ids[i];
       uint8_t ctrl_status = MMS_CTRL_STATUS_NO_CONTROL;
       uint8_t in_position = 0;
       
       do
       {
         delay(100);
-        errno = MMS_GetControlStatus(servo_ids[i], &ctrl_status, &in_position, errorHandler);
+        errno = MMS_GetControlStatus(servo_addr, &ctrl_status, &in_position, errorHandler);
         if (errno != MMS_RESP_SUCCESS)
         {
-          Serial.print("MMS_GetControlStatus returned: 0x");
-          Serial.println(errno, HEX);
+          Serial.print(F("MMS_GetControlStatus returned: 0x"));
+          Serial.print(errno, HEX);
+          Serial.print(F(", Node: 0x"));
+          Serial.println(servo_addr, HEX);
         }
       } while (errno != MMS_RESP_SUCCESS || ctrl_status != MMS_CTRL_STATUS_POSITION_CONTROL || in_position != 1);
     }
     
-    Serial.print("curr_step: ");
+    Serial.print(F("curr_step: "));
     Serial.print(curr_step);
-    Serial.print("/");    
+    Serial.print(F("/"));    
     Serial.print(step_count - 1);
-    Serial.print(", Frame: ");
+    Serial.print(F(", Frame: "));
 
     for (i=0; i<servo_cnt; i++)
     {
       Serial.print(positions[curr_step * servo_cnt + i]);
-      Serial.print(",");
+      Serial.print(F(","));
     }
-    Serial.println("#");
+    Serial.println(F("#"));
         
     // Move to frame
     for (i=0; i<servo_cnt; i++)
     {
+      uint8_t servo_addr = servo_ids[i];
       int32_t pos = positions[curr_step * servo_cnt + i];
       
       do
       {
         delay(100);
-        errno = MMS_ProfiledAbsolutePositionMove(servo_ids[i], pos, errorHandler);
+        errno = MMS_ProfiledAbsolutePositionMove(servo_addr, pos, errorHandler);
         if (errno != MMS_RESP_SUCCESS)
         {
-          Serial.print("MMS_ProfiledAbsolutePositionMove returned: 0x");
-          Serial.println(errno, HEX);
+          Serial.print(F("MMS_ProfiledAbsolutePositionMove returned: 0x"));
+          Serial.print(errno, HEX);
+          Serial.print(F(", Node: 0x"));
+          Serial.println(servo_addr, HEX);
         }
       } while (errno != MMS_RESP_SUCCESS);
     }
