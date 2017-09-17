@@ -309,7 +309,7 @@ void loop()
     }
     else
     {
-      if (sizeof(positions) - step_count * servo_cnt >= servo_cnt)
+      if (sizeof(positions) / sizeof(positions[0]) - step_count * servo_cnt >= servo_cnt)
       {
         // We have enougn space
         
