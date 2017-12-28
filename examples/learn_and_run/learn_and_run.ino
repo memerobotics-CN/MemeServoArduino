@@ -60,7 +60,7 @@ SoftwareSerial SoftSerial(RX_PIN, TX_PIN);
 #define SerialToDevice Serial1
 #endif
 
-#define SerialToConsole Serial
+//#define SerialToConsole Serial
 
 
 void recvDataUART()
@@ -92,6 +92,7 @@ void errorHandler(uint8_t node_addr, uint8_t errno)
 }
 
 
+const uint8_t led = 13;
 const uint8_t keyLearn = 2;
 const uint8_t keyRun = 3;
 
@@ -132,6 +133,18 @@ void keyRunPressedCallback()
   keyRunPressed = true;
 }
 
+void blinkLed(uint8_t times)
+{
+  uint8_t i;
+  
+  for (i=0; i<times; i++)
+  {
+    digitalWrite(led, 0);
+    delay(100);
+    digitalWrite(led, 1);
+    delay(100);
+  }
+}
 
 void scanServos(uint8_t servo_ids[], uint8_t &servo_cnt)
 {
@@ -202,6 +215,9 @@ void setup()
   SerialToConsole.println(("Start."));
 #endif
 
+  pinMode(led, OUTPUT);
+  blinkLed(5);
+
 #if (INTERFACE_TYPE == INTERFACE_TYPE_IIC)
 
   Wire.begin(ADDRESS_MASTER);     // join i2c bus
@@ -252,6 +268,8 @@ void setup()
   {
 #ifdef SerialToConsole
     SerialToConsole.println(F("Servos found are not the same as stored."));
+#else
+    blinkLed(5);
 #endif
 
     position_info.servo_cnt = 0;
@@ -278,6 +296,8 @@ void loop()
       {
 #ifdef SerialToConsole
         SerialToConsole.println(F("No servo found."));
+#else
+        blinkLed(5);
 #endif
         while(true);  // halt
       }
@@ -288,6 +308,8 @@ void loop()
 
 #ifdef SerialToConsole
       SerialToConsole.println(F("Start learning mode."));
+#else
+      blinkLed(3);
 #endif
 
       status = STATUS_LEARNING;
@@ -309,6 +331,8 @@ void loop()
             SerialToConsole.print(errno, HEX);
             SerialToConsole.print(F(", Node: 0x"));
             SerialToConsole.println(servo_addr, HEX);
+#else
+            blinkLed(5);
 #endif
           }
         } while (errno != MMS_RESP_SUCCESS);
@@ -324,6 +348,8 @@ void loop()
             SerialToConsole.print(errno, HEX);
             SerialToConsole.print(F(", Node: 0x"));
             SerialToConsole.println(servo_addr, HEX);
+#else
+            blinkLed(5);
 #endif
           }
         } while (errno != MMS_RESP_SUCCESS);
@@ -347,6 +373,8 @@ void loop()
             SerialToConsole.print(errno, HEX);
             SerialToConsole.print(F(", Node: 0x"));
             SerialToConsole.println(servo_addr, HEX);
+#else
+            blinkLed(5);
 #endif
           }
         } while (errno != MMS_RESP_SUCCESS || ctrl_status != MMS_CTRL_STATUS_POSITION_CONTROL || in_position != 1);
@@ -368,6 +396,8 @@ void loop()
             SerialToConsole.print(errno, HEX);
             SerialToConsole.print(F(", Node: 0x"));
             SerialToConsole.println(servo_addr, HEX);
+#else
+            blinkLed(5);
 #endif
           }
         } while (errno != MMS_RESP_SUCCESS);
@@ -383,6 +413,8 @@ void loop()
             SerialToConsole.print(errno, HEX);
             SerialToConsole.print(F(", Node: 0x"));
             SerialToConsole.println(servo_addr, HEX);
+#else
+            blinkLed(5);
 #endif
           }
         } while (errno != MMS_RESP_SUCCESS);
@@ -413,6 +445,8 @@ void loop()
               SerialToConsole.print(errno, HEX);
               SerialToConsole.print(F(", Node: 0x"));
               SerialToConsole.println(servo_addr, HEX);
+#else
+              blinkLed(5);
 #endif
             }
           } while (errno != MMS_RESP_SUCCESS);
@@ -473,6 +507,8 @@ void loop()
             SerialToConsole.print(errno, HEX);
             SerialToConsole.print(F(", Node: 0x"));
             SerialToConsole.println(servo_addr, HEX);
+#else
+            blinkLed(5);
 #endif
           }
         } while (errno != MMS_RESP_SUCCESS);
@@ -488,6 +524,8 @@ void loop()
             SerialToConsole.print(errno, HEX);
             SerialToConsole.print(F(", Node: 0x"));
             SerialToConsole.println(servo_addr, HEX);
+#else
+            blinkLed(5);
 #endif
           }
         } while (errno != MMS_RESP_SUCCESS);
@@ -511,6 +549,8 @@ void loop()
             SerialToConsole.print(errno, HEX);
             SerialToConsole.print(F(", Node: 0x"));
             SerialToConsole.println(servo_addr, HEX);
+#else
+            blinkLed(5);
 #endif
           }
         } while (errno != MMS_RESP_SUCCESS || ctrl_status != MMS_CTRL_STATUS_POSITION_CONTROL || in_position != 1);
@@ -542,6 +582,8 @@ void loop()
           SerialToConsole.print(errno, HEX);
           SerialToConsole.print(F(", Node: 0x"));
           SerialToConsole.println(servo_addr, HEX);
+#else
+          blinkLed(5);
 #endif
         }
       } while (errno != MMS_RESP_SUCCESS || ctrl_status != MMS_CTRL_STATUS_POSITION_CONTROL || in_position != 1);
@@ -579,6 +621,8 @@ void loop()
           SerialToConsole.print(errno, HEX);
           SerialToConsole.print(F(", Node: 0x"));
           SerialToConsole.println(servo_addr, HEX);
+#else
+          blinkLed(5);
 #endif
         }
       } while (errno != MMS_RESP_SUCCESS);
