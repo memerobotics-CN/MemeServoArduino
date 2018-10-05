@@ -4,7 +4,7 @@
 MemeServoArduino is a arduino API for controlling MemeServo.
 
 ### Install MemeServoAPI
-git submodule add -f https://github.com/memerobotics-CN/MemeServoAPI.git MemeServoAPI 
+run 'git submodule update --init --recursive'
 
 ### Usage
 ```
